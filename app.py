@@ -29,6 +29,7 @@ def otu():
 @app.route("/metadata/<sampleid>")
 def metadata(sampleid):
     df = pd.read_csv(datafile_metadata)
+    sampleid = int(sampleid.split("_")[1])
     sampleid_df =df.loc[df['SAMPLEID'] == int(sampleid)]
     meta_df = sampleid_df.to_dict('records')
     return jsonify(meta_df)
@@ -36,6 +37,7 @@ def metadata(sampleid):
 @app.route('/wfreq/<sampleid>')
 def wfreq(sampleid):
     df = pd.read_csv(datafile_metadata)
+    sampleid = int(sampleid.split("_")[1])
     sampleid_df =df.loc[df['SAMPLEID'] == int(sampleid)]
     sampleid_df_wfreq = sampleid_df.filter(items=['WFREQ'])
     value = sampleid_df_wfreq['WFREQ'].values[0]
@@ -44,7 +46,8 @@ def wfreq(sampleid):
 @app.route('/samples/<sampleid>')
 def samples(sampleid):
     df = pd.read_csv(datafile_names)
-    sampleid_ = 'BB_' + str(sampleid)
+    # sampleid_ = 'BB_' + str(sampleid)
+    sampleid_ = str(sampleid)
     data = df[['otu_id',sampleid_]]
     data=data.loc[data[sampleid_]>0]
     data.columns=['otu_id',sampleid_]
